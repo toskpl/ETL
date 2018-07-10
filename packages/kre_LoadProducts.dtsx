@@ -1,0 +1,123 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/26/2017 5:18:04 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="TERM1"
+  DTS:CreatorName="LABS\s45059"
+  DTS:DTSID="{5C40BA04-6CDA-4F83-A853-2AC77316A683}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="13.0.2164.0"
+  DTS:LocaleID="1045"
+  DTS:ObjectName="LoadProducts"
+  DTS:PackageType="5"
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{971B3F30-F32F-4EA1-94BB-989C8EB123AF}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\loadProductsFromTable"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{C85470C0-E9B2-4F7D-ABE0-5A25D551FFFA}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="loadProductsFromTable"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2016; © 2015 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{27828258-CF38-405E-909F-C418B92EF017}"
+          SQLTask:SqlStatementSource="--script for inserting DrugProducts and DrugProductFamily into dim_product&#xA;declare&#xA;&#x9;@MinDate&#x9;&#x9;&#x9;&#x9;date = convert(datetime, '1800.01.01', 102)&#xA;,&#x9;@MaxDate&#x9;&#x9;&#x9;&#x9;date = convert(datetime, '9999.12.31', 102)&#xA;,&#x9;@DrugProductId&#x9;&#x9;&#x9;char(13)&#xA;,&#x9;@DrugProductName&#x9;&#x9;varchar(250)&#xA;,&#x9;@DrugProductFamilyName&#x9;varchar(250)&#xA;,&#x9;@ProductCursor&#x9;&#x9;&#x9;CURSOR&#xA;,&#x9;@Counter&#x9;&#x9;&#x9;&#x9;INT = 0&#xA;;&#xA;&#xA;set @ProductCursor = CURSOR FOR &#xA;&#x9;select &#xA;&#x9;&#x9;&#x9;dp.DrugProductId&#xA;&#x9;&#x9;,&#x9;dp.DrugProductName&#xA;&#x9;&#x9;,&#x9;dpf.DrugProductFamilyName&#xA;&#x9;from&#xA;&#x9;&#x9;DrugProduct dp&#xA;&#x9;&#x9;left outer join DrugProductFamily dpf&#xA;&#x9;&#x9;on dpf.DrugProductFamilyId = dp.DrugProductFamilyId&#xA;&#x9;where &#xA;&#x9;&#x9;&#x9;1=1&#xA;&#x9;&#x9;and&#x9;dp.DrugProductFamilyId is not null&#xA;&#x9;;&#xA;&#xA;open @ProductCursor;&#xA;fetch next from @ProductCursor into @DrugProductId, @DrugProductName, @DrugProductFamilyName;&#xA;&#xA;while @@FETCH_STATUS = 0&#xA;&#x9;begin&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;insert into dim_product(&#xA;&#x9;&#x9;&#x9;&#x9;product_nk&#xA;&#x9;&#x9;&#x9;,&#x9;product_description&#xA;&#x9;&#x9;&#x9;,&#x9;product_family_description&#xA;&#x9;&#x9;&#x9;,&#x9;product_date_from&#xA;&#x9;&#x9;&#x9;,&#x9;product_date_to&#xA;&#x9;&#x9;&#x9;,&#x9;product_is_current&#xA;&#x9;&#x9;)&#xA;&#x9;&#x9;values(&#xA;&#x9;&#x9;&#x9;&#x9;@DrugProductId&#xA;&#x9;&#x9;&#x9;,&#x9;@DrugProductName&#xA;&#x9;&#x9;&#x9;,&#x9;@DrugProductFamilyName&#xA;&#x9;&#x9;&#x9;,&#x9;@MinDate&#xA;&#x9;&#x9;&#x9;,&#x9;@MaxDate&#xA;&#x9;&#x9;&#x9;,&#x9;'Y'&#xA;&#x9;&#x9;);&#xA;&#xA;&#x9;&#x9;fetch next from @ProductCursor into @DrugProductId, @DrugProductName, @DrugProductFamilyName;&#xA;&#x9;&#x9;set @Counter += 1;&#xA;&#x9;end;&#xA;&#xA;close @ProductCursor;&#xA;deallocate @ProductCursor;&#xA;&#xA;print cast(@Counter as varchar(1000));&#xA;&#xA;&#xA;&#xA;-- end of script" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\truncateDimProducts"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{359C9B00-3512-4D2C-AB31-9F79A8ACC469}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="truncateDimProducts"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2016; © 2015 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{27828258-CF38-405E-909F-C418B92EF017}"
+          SQLTask:SqlStatementSource="delete from dim_product;&#xA;dbcc checkident (dim_product, reseed, 0);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{96D2A784-06CD-453C-BDE3-3737BDCF9017}"
+      DTS:From="Package\truncateDimProducts"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\loadProductsFromTable" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="177,42"
+          Id="Package\truncateDimProducts"
+          TopLeft="5.5,5.5" />
+        <NodeLayout
+          Size="189,42"
+          Id="Package\loadProductsFromTable"
+          TopLeft="46.5,187.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="94,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="47,140"
+              Start="0,0"
+              End="47,132.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,66" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,66"
+                    Point2="0,70"
+                    Point3="4,70" />
+                  <mssgle:LineSegment
+                    End="43,70" />
+                  <mssgle:CubicBezierSegment
+                    Point1="43,70"
+                    Point2="47,70"
+                    Point3="47,74" />
+                  <mssgle:LineSegment
+                    End="47,132.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

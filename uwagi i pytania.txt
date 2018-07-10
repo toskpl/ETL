@@ -1,0 +1,23 @@
+1. Czy lek ma tylko 1 wskazanie czy moze byc wiecej
+2. Czy jest potrzebne rodzina lekow (produkt family)
+3. Widoki dla fabryk i dat (po 3 widoki na kazdy FK)
+4. Czy lek moze byc produkowany w wiecej niz jednej fabryce (API, BULK PACKAGE)
+
+
+
+
+Dodac do modelu
+fakt_product_registration:
+- indication
+- submission country
+
+--21-04-2017
+co zrobić z niepoprawnymi datami wnisienia wniosku:
+daty wniesienia wniosku:
+najstarsze: 
+	złożenie:1900-01-01   		oczekiwana odp: 1900-06-29
+	
+w przyszłości: 
+	złożenie : 2207-06-28		oczekiwana odp: 2207-12-25
+	
+	

@@ -1,0 +1,111 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="4/21/2017 11:20:53 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="TERM1"
+  DTS:CreatorName="LABS\s45059"
+  DTS:DTSID="{08A50053-9DF8-4970-A11A-ACE05B8239A6}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="13.0.2164.0"
+  DTS:LocaleID="1045"
+  DTS:ObjectName="LoadDates"
+  DTS:PackageType="5"
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{3B5E0DA8-A7C2-41F0-9C34-90179FB32557}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\generateDimDates"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6228AF8E-4017-4232-8E9F-EDD2DB53D946}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="generateDimDates"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2016; © 2015 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{27828258-CF38-405E-909F-C418B92EF017}"
+          SQLTask:SqlStatementSource="declare&#xA;&#x9;@StartDate date = convert(datetime, '1800.01.01', 102)&#xA;,&#x9;@EndDate date = convert(datetime, '2099.12.31', 102)&#xA;,&#x9;@DateCounter int = 0;&#xA;&#xA;while (@StartDate &lt;= @EndDate)&#xA;begin&#xA;&#x9;insert into dim_dates(&#xA;&#x9;&#x9;&#x9;dates_nk&#xA;&#x9;&#x9;,&#x9;dates_year&#xA;&#x9;&#x9;,&#x9;dates_month&#xA;&#x9;&#x9;,&#x9;dates_day&#xA;&#x9;&#x9;,&#x9;dates_quarter&#xA;&#x9;&#x9;,&#x9;dates_year_quarter) &#xA;&#x9;values(&#xA;&#x9;&#x9;&#x9;@StartDate&#xA;&#x9;&#x9;,&#x9;cast(FORMAT( @StartDate, 'yyyy') as varchar)&#xA;&#x9;&#x9;,&#x9;cast(FORMAT( @StartDate, 'MM') as varchar)&#xA;&#x9;&#x9;,&#x9;cast(FORMAT( @StartDate, 'dd') as varchar)&#xA;&#x9;&#x9;,&#x9;'Q'+ cast(DATEPART(QUARTER, @StartDate)&#x9;as varchar)&#xA;&#x9;&#x9;,&#x9;cast(FORMAT( @StartDate, 'yyyy') as varchar) + '.Q'+ cast(DATEPART(QUARTER, @StartDate)&#x9;as varchar)&#xA;&#x9;)&#xA;&#x9;set @DateCounter += 1;&#xA;&#x9;set @StartDate = dateadd(day,1,@StartDate);&#xA;end;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\truncateDimDates"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{9CC886B8-9196-4B42-A4CE-97311FE22FFC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="truncateDimDates"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2016; © 2015 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{27828258-CF38-405E-909F-C418B92EF017}"
+          SQLTask:SqlStatementSource="delete from dim_dates;&#xA;dbcc checkident (dim_dates, reseed, 0);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{7DC4D902-E221-4265-A973-A11AB489FE04}"
+      DTS:From="Package\truncateDimDates"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\generateDimDates" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="166,42"
+          Id="Package\generateDimDates"
+          TopLeft="90,161" />
+        <NodeLayout
+          Size="163,42"
+          Id="Package\truncateDimDates"
+          TopLeft="91,37" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="172.75,79">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,82"
+              Start="0,0"
+              End="0,74.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,74.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

@@ -1,0 +1,45 @@
+Errors:
+
+1. dim_country
+	- no errors in file countries_data.xlsx
+	- no duplicates
+	
+2. dim_dates
+	- generated, no errors
+	- no duplicates
+
+3. dim_factory
+	- SCD2!!!
+	- factories.tsv & factories_2.tsv:
+		- 1 record with additional space character in FactoryId (makes the ID 5-char long instead of 4)
+		- 1 record has lower case letter in FactoryID
+
+4. dim_indication
+	- no errors expected(?)
+	- no duplicates
+
+5. dim_products
+	- product familly is null - 12 records
+	- no duplicates in DrugProductId
+	- no duplicates in DrugProductFamilyId
+	
+6. dim_response_type
+	- generated no errors
+	- only 3 records, no duplicates
+	
+	
+7. Claims
+	- no duplicates in ClaimNumber
+	- only 2 claim type: REGISTER, REFUND
+	- price given as varchar with CHF suffix (only one suffix, rest of the string is 3-digit number and space character: XXX CHF)
+	- reimbursement given as SMALLINT - 2 digit number: XX
+	
+FILES
+8. responses_data.xlsx
+	- 117 duplicated ClaimNumber
+	- 39 records with wrong repsponse type (#VALUE)
+	- 8 different valid response types (N, rejected, app, declined, Y, yes, APPROVED, NO)
+			UPPER( [XLSX_Response] )=="APP" || UPPER( [XLSX_Response] ) == "Y" || UPPER( [XLSX_Response] ) == "YES" || UPPER( [XLSX_Response] ) == "APPROVED" ? "A" : ( UPPER( [XLSX_Response] )=="N" || UPPER( [XLSX_Response] ) == "REJECTED" || UPPER( [XLSX_Response] ) == "DECLINED" || UPPER( [XLSX_Response] ) == "NO" ? "R" : [XLSX_Response])
+			
+	- 25 records with wrong response date (1900-01-01, #VALUE, 2033-05-14)
+	

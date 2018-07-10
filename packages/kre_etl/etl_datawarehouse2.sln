@@ -1,0 +1,19 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "etl_datawarehouse2", "etl_datawarehouse2\etl_datawarehouse2.dtproj", "{AA8A4057-E775-4A2E-B327-0F3A8CF1019C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA8A4057-E775-4A2E-B327-0F3A8CF1019C}.Development|Default.ActiveCfg = Development
+		{AA8A4057-E775-4A2E-B327-0F3A8CF1019C}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
